@@ -1,0 +1,483 @@
+#:import Factory kivy.factory.Factory
+
+#:set logoPanel_Color 0.8, 0.8, 0.8, 1
+#:set backGround_Color 0, 0, 0, 1
+#:set black_Color 0, 0, 0, 1
+#:set footerText_Color 1, 1, 1, 1
+#:set yOffsetDisplay 50
+#:set headerFont 40
+#:set headerColor 0, 1, 0, 1
+#:set prayerFont 40
+#:set prayerColor 0.5, 0.5, 0.5, 1
+
+## Window for screen displaying azaan times
+
+## Window for screen displaying jamaat times
+<JamaatTimeScreen@BoxLayout>:
+    canvas.before:
+        Color:
+        Rectangle:
+            size: self.size
+            pos: self.x + sp(2), self.y + sp(2)
+            size: self.width - sp(4), self.height - sp(4)
+
+## Window for settings Screen
+<SettingsScreen@BoxLayout>:
+    canvas.before:
+        Color:
+        Rectangle:
+            size: self.size
+            pos: self.x + sp(2), self.y + sp(2)
+            size: self.width - sp(4), self.height - sp(4)
+
+## Main Kivy class
+<NAMAZTIMESWidget>:
+    fullscreen: True
+
+    ## Carousel is the container for displaying different screens
+    ## It has a feature for moving onto the next screen on swipe
+    Carousel:
+        id: carousel
+        anim_move_duration: 1
+        loop: False
+
+## JAMAAT TIMES WINDOW
+        JamaatTimeScreen:
+            BoxLayout:
+                canvas:
+                    Color:
+                        rgba: backGround_Color
+                    Rectangle:
+                        size: self.size
+                        pos: self.pos
+                        
+                ## 1. Logo Panel
+                FloatLayout:
+                    pos: self.parent.pos
+                    BoxLayout:
+                        size_hint: None, None
+                        pos: 0, 760 + yOffsetDisplay
+                        size: 1280, 200
+                        canvas:
+                            Color:
+                                rgba: logoPanel_Color
+                            Rectangle:
+                                size: self.size
+                                pos: self.pos
+                        
+                ## 2. GUI for Logo display
+                FloatLayout:
+                    pos: self.parent.pos
+                    BoxLayout:
+                        size_hint: None, None
+                        pos: 0, 760 + yOffsetDisplay
+                        size: 1280, 200
+                        Image:
+                            id: logo
+                            source: 'logo.png'
+                            size: 1280, 200
+
+                ## Imsak / Sahoor Time
+                FloatLayout:
+                    BoxLayout:
+                        pos: 53, 760
+                        size_hint: None, None
+                        size: 615, 22
+                        canvas:
+                            Color:
+                                rgba: black_Color
+                            Rectangle:
+                                size: self.size
+                                pos: self.pos
+                        Label:
+                            id: imsak_Label
+                            bold: True
+                            text: "--.--.--"
+                            halign: 'left'
+                            text_size: self.size
+                            font_size: 22
+                            color: footerText_Color
+                            size: 615, 22
+
+                ## Sunrise Time
+                FloatLayout:
+                    BoxLayout:
+                        pos: 920, 760
+                        size_hint: None, None
+                        size: 308, 22
+                        canvas:
+                            Color:
+                                rgba: black_Color
+                            Rectangle:
+                                size: self.size
+                                pos: self.pos
+                        Label:
+                            id: sunrise_Label
+                            bold: True
+                            text: "--.--.--"
+                            halign: 'right'
+                            text_size: self.size
+                            font_size: 22
+                            color: footerText_Color
+                            size: 303, 42
+
+				## Today's Hijri date
+                FloatLayout:
+                    BoxLayout:
+                        pos: 380, 760
+                        size_hint: None, None
+                        size: 520, 70
+                        canvas:
+                            Color:
+                                rgba: black_Color
+                            Rectangle:
+                                size: self.size
+                                pos: self.pos
+                        Label:
+                            id: date_Label
+                            bold: True
+                            text: "**-**-****"
+                            font_size: 45
+                            halign: 'center'
+                            color: footerText_Color
+                            size: 530, 70
+
+				# Prayer Times Table
+				FloatLayout:
+                    pos: self.parent.pos
+                    BoxLayout:
+                        size_hint: None, None
+                        pos: 50, 100
+                        size: 1180, 650
+                        canvas:
+                            Color:
+                                rgba: black_Color
+                            Rectangle:
+                                size: self.size
+                                pos: self.pos
+						GridLayout:
+							cols: 4
+							rows: 7
+
+							## Row 1 - Header
+							Button:
+								id: PrayerName
+								text: 'Gebet'
+								font_size: headerFont
+								halign: 'center'
+								background_color: headerColor
+								bold: True
+								on_press: root.showSettingsScreen()
+							Button:
+								id: Adhan
+								text: 'Adhan-Zeit'
+								font_size: headerFont
+								halign: 'center'
+								background_color: headerColor
+								bold: True
+							Button:
+								id: Iqamah
+								text: 'Iqamah-Zeit'
+								font_size: headerFont
+								halign: 'center'
+								background_color: headerColor
+								bold: True
+							Button:
+							    id: PrayerName_AR
+							    text: ''
+							    font_size: headerFont
+							    halign: 'center'
+								background_color: headerColor
+								bold: True
+
+							## Row 2 - Fajr
+							Button:
+								id: Fajr
+								text: 'Fajr'
+								font_size: prayerFont
+								halign: 'center'
+								background_color: prayerColor
+								bold: True
+							Button:
+								id: FajrAdhan
+								text: '00:00'
+								font_size: prayerFont
+								halign: 'center'
+								background_color: prayerColor
+							Button:
+								id: FajrIqamah
+								text: '00:00'
+								font_size: prayerFont
+								halign: 'center'
+								background_color: prayerColor
+							Button:
+							    id: Fajr_AR
+							    text: ''
+							    font_size: prayerFont
+							    halign: 'center'
+								background_color: prayerColor
+								bold: True
+
+							## Row 3 - Dhuhr
+							Button:
+								id: Dhuhr
+								text: 'Dhuhr'
+								font_size: prayerFont
+								halign: 'center'
+								background_color: prayerColor
+								bold: True
+								markup: True
+							Button:
+								id: DhuhrAdhan
+								text: '00:00'
+								font_size: prayerFont
+								halign: 'center'
+								background_color: prayerColor
+								bold: True
+								markup: True
+							Button:
+								id: DhuhrIqamah
+								text: '00:00'
+								font_size: prayerFont
+								halign: 'center'
+								background_color: prayerColor
+								bold: True
+								markup: True
+							Button:
+							    id: Dhuhr_AR
+							    text: ''
+							    font_size: prayerFont
+							    halign: 'center'
+								background_color: prayerColor
+								bold: True
+								markup: True
+
+                            ## Row 4 - Asr
+							Button:
+								id: Asr
+								text: 'Asr'
+								font_size: prayerFont
+								halign: 'center'
+								background_color: prayerColor
+							Button:
+								id: AsrAdhan
+								text: '00:00'
+								font_size: prayerFont
+								halign: 'center'
+								background_color: prayerColor
+							Button:
+								id: AsrIqamah
+								text: '00:00'
+								font_size: prayerFont
+								halign: 'center'
+								background_color: prayerColor
+							Button:
+							    id: Asr_AR
+							    text: ''
+							    font_size: prayerFont
+							    halign: 'center'
+								background_color: prayerColor
+
+                            ## Row 5 - Maghrib
+							Button:
+								id: Maghrib
+								text: 'Maghrib'
+								font_size: prayerFont
+								halign: 'center'
+								background_color: prayerColor
+							Button:
+								id: MaghribAdhan
+								text: '00:00'
+								font_size: prayerFont
+								halign: 'center'
+								background_color: prayerColor
+							Button:
+								id: MaghribIqamah
+								text: '00:00'
+								font_size: prayerFont
+								halign: 'center'
+								background_color: prayerColor
+							Button:
+							    id: Maghrib_AR
+							    text: ''
+							    font_size: prayerFont
+							    halign: 'center'
+								background_color: prayerColor
+
+							## Row 6 - Ischa
+							Button:
+								id: Ischa
+								text: 'Ischa'
+								font_size: prayerFont
+								halign: 'center'
+								background_color: prayerColor
+							Button:
+								id: IschaAdhan
+								text: '00:00'
+								font_size: prayerFont
+								halign: 'center'
+								background_color: prayerColor
+							Button:
+								id: IschaIqamah
+								text: '00:00'
+								font_size: prayerFont
+								halign: 'center'
+								background_color: prayerColor
+							Button:
+							    id: Ischa_AR
+							    text: ''
+							    font_size: prayerFont
+							    halign: 'center'
+								background_color: prayerColor
+
+							## Row 7 - Jummah
+							Button:
+								id: Jummah
+								text: 'Freitagsgebet'
+								font_size: prayerFont
+								halign: 'center'
+								background_color: prayerColor
+							Button:
+								id: JummahAdhan
+								text: '00:00'
+								font_size: prayerFont
+								halign: 'center'
+								background_color: prayerColor
+							Button:
+								id: JummahIqamah
+								text: '00:00'
+								font_size: prayerFont
+								halign: 'center'
+								background_color: prayerColor
+							Button:
+							    id: Jummah_AR
+							    text: ''
+							    font_size: prayerFont
+							    halign: 'center'
+								background_color: prayerColor
+
+                ## Today's date
+                FloatLayout:
+                    BoxLayout:
+                        pos: 50, 20
+                        size_hint: None, None
+                        size: 620, 42
+                        canvas:
+                            Color:
+                                rgba: black_Color
+                            Rectangle:
+                                size: self.size
+                                pos: self.pos
+                        Label:
+                            id: dateHijri_Label
+                            bold: True
+                            text: "**-**-****"
+                            halign: 'left'
+                            text_size: self.size
+                            font_size: 42
+                            color: footerText_Color
+                            size: 620, 42
+
+                ## Current time
+                FloatLayout:
+                    BoxLayout:
+                        pos: 1010, 20
+                        size_hint: None, None
+                        size: 220, 45
+                        canvas:
+                            Color:
+                                rgba: black_Color
+                            Rectangle:
+                                size: self.size
+                                pos: self.pos
+                        Label:
+                            id: time_Label
+                            bold: True
+                            text: "--:--:--"
+                            halign: 'right'
+                            font_size: 45
+                            text_size: self.size
+                            color: footerText_Color
+                            size: 220, 45
+
+        ## SETTINGS WINDOW
+        SettingsScreen:
+            BoxLayout:
+                canvas:
+                    Color:
+                        rgba: 1,1,1,1
+                    Rectangle:
+                        size: self.size
+                        pos: self.pos
+
+                ## 1. Logo Panel
+                FloatLayout:
+                    pos: self.parent.pos
+                    BoxLayout:
+                        size_hint: None, None
+                        pos: 0, 760 + yOffsetDisplay
+                        size: 1280, 200
+                        canvas:
+                            Color:
+                                rgba: logoPanel_Color
+                            Rectangle:
+                                size: self.size
+                                pos: self.pos
+
+                ## 2. GUI for Logo display
+                FloatLayout:
+                    pos: self.parent.pos
+                    BoxLayout:
+                        size_hint: None, None
+                        pos: 0, 760 + yOffsetDisplay
+                        size: 1280, 200
+                        Image:
+                            id: logo
+                            source: 'logo.png'
+                            size: 1280, 200
+
+                ## Back Button
+                FloatLayout:
+                    pos: self.parent.pos
+                    BoxLayout:
+                        size_hint: None, None
+                        pos: 700, 50
+                        size: 200, 80
+                        canvas:
+                            Color:
+                                rgba: black_Color
+                            Rectangle:
+                                size: self.size
+                                pos: self.pos
+
+                        Button:
+                            id: BackButton
+                            text: 'Back'
+                            font_size: headerFont
+                            halign: 'center'
+                            background_color: headerColor
+                            bold: True
+                            on_press: root.showMainScreen()
+
+                ## Apply Settings Button
+                FloatLayout:
+                    pos: self.parent.pos
+                    BoxLayout:
+                        size_hint: None, None
+                        pos: 925, 50
+                        size: 200, 80
+                        canvas:
+                            Color:
+                                rgba: black_Color
+                            Rectangle:
+                                size: self.size
+                                pos: self.pos
+
+                        Button:
+                            id: ApplyButton
+                            text: 'Apply'
+                            font_size: headerFont
+                            halign: 'center'
+                            background_color: headerColor
+                            bold: True
+                            on_press: root.showMainScreen()
